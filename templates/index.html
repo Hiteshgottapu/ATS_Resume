@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS Resume Matcher</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+        .main-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 650px;
+            width: 100%;
+            margin-top: 60px;
+            padding: 0 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+            padding: 38px 32px 32px 32px;
+            margin-bottom: 40px;
+            animation: fadeIn 0.7s;
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 18px;
+            align-self: center;
+        }
+        .logo-icon {
+            width: 54px;
+            height: 54px;
+            background: linear-gradient(135deg, #6c63ff 60%, #48c6ef 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 12px rgba(76, 110, 245, 0.13);
+        }
+        .logo-icon svg {
+            width: 32px;
+            height: 32px;
+            color: #fff;
+        }
+        h1 {
+            font-weight: 700;
+            color: #2d3a4b;
+            text-align: left;
+            margin-bottom: 18px;
+            letter-spacing: -1px;
+            width: 100%;
+        }
+        .stepper {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 18px;
+            width: 100%;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: #6c63ff;
+            background: #f3f6fa;
+            border-radius: 16px;
+            padding: 6px 18px 6px 12px;
+            font-size: 1.02rem;
+            box-shadow: 0 1px 4px rgba(76, 110, 245, 0.06);
+        }
+        .step svg {
+            margin-right: 8px;
+            color: #48c6ef;
+            width: 20px;
+            height: 20px;
+        }
+        .divider {
+            width: 28px;
+            height: 2px;
+            background: linear-gradient(90deg, #6c63ff 0%, #48c6ef 100%);
+            border-radius: 2px;
+        }
+        label {
+            font-weight: 600;
+            color: #2d3a4b;
+            margin-bottom: 6px;
+        }
+        .form-section {
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e6eaf3;
+            width: 100%;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #2d3a4b;
+        }
+        .file-upload-label svg {
+            margin-right: 7px;
+            color: #6c63ff;
+            width: 20px;
+            height: 20px;
+        }
+        .form-control-file {
+            margin-top: 6px;
+        }
+        textarea, input[type="number"] {
+            border-radius: 10px;
+            border: 1px solid #bfc9d1;
+            background: #f8fafc;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        textarea:focus, input[type="number"]:focus {
+            border-color: #6c63ff;
+            box-shadow: 0 0 0 2px #e0eafc;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #6c63ff 0%, #48c6ef 100%);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 12px 36px;
+            font-size: 1.1rem;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(76, 110, 245, 0.08);
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            background: linear-gradient(90deg, #48c6ef 0%, #6c63ff 100%);
+            box-shadow: 0 4px 16px rgba(76, 110, 245, 0.13);
+        }
+        .text-center {
+            margin-top: 18px;
+            width: 100%;
+            text-align: center;
+        }
+        .or-separator {
+            text-align: center;
+            color: #bfc9d1;
+            font-weight: 600;
+            margin: 10px 0 10px 0;
+            font-size: 1.05rem;
+            letter-spacing: 0.04em;
+            width: 100%;
+        }
+        footer {
+            text-align: center;
+            color: #7a8ca3;
+            font-size: 0.98rem;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            letter-spacing: 0.02em;
+        }
+        .custom-file-upload-area {
+            border: 2px dashed #bfc9d1;
+            border-radius: 12px;
+            background: #f8fafc;
+            padding: 22px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            margin-bottom: 8px;
+            position: relative;
+            width: 100%;
+        }
+        .custom-file-upload-area:hover, .custom-file-upload-area:focus-within {
+            border-color: #6c63ff;
+            background: #f0f4ff;
+        }
+        .custom-file-upload-area input[type="file"] {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0; top: 0;
+            cursor: pointer;
+        }
+        .file-upload-icon {
+            color: #6c63ff;
+            width: 32px;
+            height: 32px;
+            margin-bottom: 8px;
+        }
+        .accepted-formats {
+            color: #7a8ca3;
+            font-size: 0.98rem;
+            margin-top: 4px;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+        @media (max-width: 700px) {
+            .container {
+                max-width: 99vw;
+                padding: 0 6px;
+            }
+            .card {
+                padding: 18px 8px 18px 8px;
+                max-width: 100vw;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .stepper {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+            .divider {
+                width: 2px;
+                height: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="card">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="3" width="18" height="18" rx="5" fill="currentColor"/>
+                            <path d="M8 12h8M12 8v8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <h1>ATS Resume Matcher</h1>
+                <div class="stepper">
+                    <div class="step">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                            <path d="M7 9l5-5 5 5" />
+                            <path d="M12 4v12" />
+                        </svg>
+                        Upload Resume
+                    </div>
+                    <div class="divider"></div>
+                    <div class="step">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M8 12h8M12 8v8" />
+                        </svg>
+                        Paste Job Description
+                    </div>
+                    <div class="divider"></div>
+                    <div class="step">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M9 9h6v6H9z" />
+                        </svg>
+                        Get Results
+                    </div>
+                </div>
+                <form action="/process" method="POST" class="mt-4" enctype="multipart/form-data" style="width:100%;">
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label class="file-upload-label" for="resume_file">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                                    <path d="M7 9l5-5 5 5" />
+                                    <path d="M12 4v12" />
+                                </svg>
+                                Resume File
+                            </label>
+                            <div class="custom-file-upload-area" id="customFileArea" tabindex="0">
+                                <svg class="file-upload-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M12 16v-8M8 12h8" stroke-linecap="round"/>
+                                    <rect x="3" y="3" width="18" height="18" rx="5" stroke="#6c63ff" stroke-width="1.5" fill="none"/>
+                                </svg>
+                                <div>Drag &amp; drop or <span style="color:#6c63ff;text-decoration:underline;cursor:pointer;" id="browseText">browse</span> your file</div>
+                                <div class="accepted-formats">Accepted formats: <b>PDF, DOCX, TXT</b></div>
+                                <input type="file" id="resume_file" name="resume_file" accept=".pdf,.docx,.txt" style="display:none;">
+                            </div>
+                            <small class="form-text text-muted">Or paste your resume text below.</small>
+                        </div>
+                        <div class="or-separator">— OR —</div>
+                        <div class="form-group">
+                            <label for="resume_text">Resume Text</label>
+                            <textarea id="resume_text" name="resume_text" class="form-control" rows="8" placeholder="Paste your resume text here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="jd_text">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle;width:18px;height:18px;margin-right:5px;">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <path d="M9 9h6v6H9z"/>
+                                </svg>
+                                Job Description Text
+                            </label>
+                            <textarea id="jd_text" name="jd_text" class="form-control" rows="8" required placeholder="Paste the job description here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="score_threshold">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle;width:18px;height:18px;margin-right:5px;">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 8v4l3 3"/>
+                                </svg>
+                                Score Threshold <span style="font-weight:400; color:#7a8ca3;">(optional)</span>
+                            </label>
+                            <input type="number" id="score_threshold" name="score_threshold" class="form-control" value="70" min="0" max="100">
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle;width:20px;height:20px;margin-right:7px;">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                                Process
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <footer>
+                &copy; 2024 ATS Resume Matcher &mdash; Powered by AI
+            </footer>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('resume_file');
+        const customFileArea = document.getElementById('customFileArea');
+        const browseText = document.getElementById('browseText');
+        const textarea = document.getElementById('resume_text');
+
+        // Click on area or browse triggers file input
+        customFileArea.addEventListener('click', function(e) {
+            if (e.target === browseText || e.target === customFileArea) {
+                fileInput.click();
+            }
+        });
+
+        // Drag and drop support
+        customFileArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            customFileArea.style.borderColor = '#6c63ff';
+            customFileArea.style.background = '#f0f4ff';
+        });
+        customFileArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            customFileArea.style.borderColor = '';
+            customFileArea.style.background = '';
+        });
+        customFileArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            customFileArea.style.borderColor = '';
+            customFileArea.style.background = '';
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                triggerFileChange();
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', triggerFileChange);
+
+        function triggerFileChange() {
+            const file = fileInput.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('resume_file', file);
+            textarea.value = "Extracting text from file, please wait...";
+            fetch('/extract_text', {
+                method: 'POST',
+                body: formData
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                textarea.value = data.text || '';
+            })
+            .catch(() => {
+                textarea.value = '';
+                alert('Failed to extract text from the uploaded file.');
+            });
+        }
+    });
+    </script>
+</body>
+</html>
