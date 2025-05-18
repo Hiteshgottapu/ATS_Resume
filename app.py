@@ -8,6 +8,7 @@ from dateutil.parser import parse as date_parse
 import spacy
 from spacy.matcher import Matcher, PhraseMatcher
 from fuzzywuzzy import fuzz
+from thinc.api import prefer_gpu, require_gpu, require_cpu  # noqa: F401
 
 app = Flask(__name__)
 
