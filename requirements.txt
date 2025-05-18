@@ -6,3 +6,4 @@ fuzzywuzzy==0.18.0
 python-Levenshtein==0.12.2
 python-docx==0.8.11
 PyPDF2==3.0.1
+werkzeug==2.0.3
