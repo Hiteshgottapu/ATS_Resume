@@ -729,5 +729,6 @@ def extract_text():
         text = resume_file.read().decode('utf-8', errors='ignore')
     return jsonify({'text': text})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# ================== Run the App ==================
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)
